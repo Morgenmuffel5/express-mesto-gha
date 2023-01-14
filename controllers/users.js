@@ -39,7 +39,7 @@ const getUserById = (req, res) => {
 const createNewUser = (req, res) => {
   const { name, about, avatar } = req.body;
   User.create({ name, about, avatar })
-    .then((user) => res.status(200).send(user))
+    .then((user) => res.status(200).send({ data: user }))
     .catch((err) => {
       if (err.name === 'ValidationError') {
         res.status(ERROR_INCORRECT_INFO).send({ message: 'Переданы некорректные данные пользователя' });

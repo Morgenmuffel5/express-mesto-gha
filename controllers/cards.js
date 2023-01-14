@@ -18,11 +18,10 @@ const createNewCard = (req, res) => {
     .then((card) => res.status(200).send({ data: card }))
     .catch((err) => {
       if (err.name === 'ValidationError') {
-        return res
-          .status(ERROR_INCORRECT_INFO)
-          .send({ message: 'Переданы некорректные данные для создании карточки' });
+        res.status(ERROR_INCORRECT_INFO).send({ message: 'Переданы некорректные данные для создании карточки' });
+      } else {
+        res.status(SERVER_ERROR).send({ message: 'Ошибка сервера' });
       }
-      return res.status(SERVER_ERROR).send({ message: 'Ошибка сервера' });
     });
 };
 
@@ -37,11 +36,10 @@ const deleteCard = (req, res) => {
     })
     .catch((err) => {
       if (err.name === 'CastError') {
-        return res
-          .status(ERROR_INCORRECT_INFO)
-          .send({ message: 'Переданы некорректные данные карточки' });
+        res.status(ERROR_INCORRECT_INFO).send({ message: 'Переданы некорректные данные карточки' });
+      } else {
+        res.status(SERVER_ERROR).send({ message: 'Ошибка серверва' });
       }
-      return res.status(SERVER_ERROR).send({ message: 'Ошибка серверва' });
     });
 };
 
