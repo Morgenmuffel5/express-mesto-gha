@@ -14,13 +14,13 @@ mongoose.connect('mongodb://localhost:27017/mestodb', {
   useNewUrlParser: true,
 });
 
-/* app.use((req, res, next) => {
+app.use((req, res, next) => {
   req.user = {
-    _id: 'какой-то id, который я никак не могу получить',
+    _id: '63c3b45c9464e0768bd534ad',
   };
 
   next();
-}); */
+});
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
