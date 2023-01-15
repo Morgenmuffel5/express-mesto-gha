@@ -64,7 +64,7 @@ const setLike = (req, res) => {
 const deleteLike = (req, res) => {
   Card.findByIdAndUpdate(req.params.cardId, { $pull: { likes: req.user._id } }, { new: true })
     .then((card) => {
-      if (!card) {
+      if (card) {
         res.status(200).send({ data: card });
       } else {
         res.status(ERROR_NOT_FOUND).send({ message: 'Карточка с указанным _id не найдена' });
