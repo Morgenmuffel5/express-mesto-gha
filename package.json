@@ -9,7 +9,7 @@
     "lint": "npx eslint ."
   },
   "keywords": [],
-  "author": "",
+  "author": "Morgenmuffel",
   "license": "ISC",
   "dependencies": {
     "body-parser": "^1.20.1",
