@@ -20,7 +20,7 @@ const createNewCard = (req, res) => {
       if (err.name === 'ValidationError') {
         res.status(ERROR_INCORRECT_INFO).send({ message: 'Переданы некорректные данные для создании карточки' });
       } else {
-        res.status(SERVER_ERROR).send({ message: 'Ошибка сервера' });
+        res.status(SERVER_ERROR).send({ message: 'На сервере произошла ошибка' });
       }
     });
 };
@@ -38,7 +38,7 @@ const deleteCard = (req, res) => {
       if (err.name === 'CastError') {
         res.status(ERROR_INCORRECT_INFO).send({ message: 'Переданы некорректные данные карточки' });
       } else {
-        res.status(SERVER_ERROR).send({ message: 'Ошибка серверва' });
+        res.status(SERVER_ERROR).send({ message: 'На сервере произошла ошибка' });
       }
     });
 };
@@ -56,7 +56,7 @@ const setLike = (req, res) => {
       if (err.name === 'CastError') {
         res.status(ERROR_INCORRECT_INFO).send({ message: 'Переданы некорректные данные карточки' });
       } else {
-        res.status(SERVER_ERROR).send({ message: 'Ошибка сервера' });
+        res.status(SERVER_ERROR).send({ message: 'На сервере произошла ошибка' });
       }
     });
 };
@@ -74,7 +74,7 @@ const deleteLike = (req, res) => {
       if (err.name === 'CastError') {
         res.status(ERROR_INCORRECT_INFO).send({ message: 'Переданы некорректные данные карточки' });
       } else {
-        res.status(SERVER_ERROR).send({ message: 'Ошибка сервера' });
+        res.status(SERVER_ERROR).send({ message: 'На сервере произошла ошибка' });
       }
     });
 };

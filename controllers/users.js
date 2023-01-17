@@ -10,7 +10,7 @@ const getUserList = (req, res) => {
       res.status(200).send(usersInfo);
     })
     .catch(() => {
-      res.status(SERVER_ERROR).send({ message: 'Ошибка сервера' });
+      res.status(SERVER_ERROR).send({ message: 'На сервере произошла ошибка' });
     });
 };
 
@@ -31,7 +31,7 @@ const getUserById = (req, res) => {
           message: 'Передан некорректный _id пользователя',
         });
       } else {
-        res.status(SERVER_ERROR).send({ message: 'Произошла ошибка на сервере' });
+        res.status(SERVER_ERROR).send({ message: 'На сервере произошла ошибка' });
       }
     });
 };
@@ -44,7 +44,7 @@ const createNewUser = (req, res) => {
       if (err.name === 'ValidationError') {
         res.status(ERROR_INCORRECT_INFO).send({ message: 'Переданы некорректные данные пользователя' });
       } else {
-        res.status(SERVER_ERROR).send({ message: 'Ошибка сервера' });
+        res.status(SERVER_ERROR).send({ message: 'На сервере произошла ошибка' });
       }
     });
 };
@@ -64,7 +64,7 @@ const updateUserInfo = (req, res) => {
       if (err.name === 'CastError') {
         res.status(ERROR_NOT_FOUND).send({ message: 'Пользователь с указанным _id не найден' });
       } else {
-        res.status(SERVER_ERROR).send({ message: 'Ошибка сервера' });
+        res.status(SERVER_ERROR).send({ message: 'На сервере произошла ошибка' });
       }
     });
 };
@@ -79,7 +79,7 @@ const changeAvatar = (req, res) => {
       } else if (err.name === 'CastError') {
         res.status(ERROR_NOT_FOUND).send({ message: 'Пользователь с указанным _id не найден' });
       } else {
-        res.status(SERVER_ERROR).send({ message: 'Ошибка сервера' });
+        res.status(SERVER_ERROR).send({ message: 'На сервере произошла ошибка' });
       }
     });
 };
