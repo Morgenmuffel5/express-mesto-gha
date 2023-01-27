@@ -1,7 +1,7 @@
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const User = require('../models/user');
-const UnauthorizedError = require('../errors/unauthorizedError');
+/* const UnauthorizedError = require('../errors/unauthorizedError'); */
 const BadRequest = require('../errors/badRequestError');
 const NotFound = require('../errors/notFoundError');
 const CheckUserError = require('../errors/checkObjectError');
@@ -106,9 +106,9 @@ const login = (req, res, next) => {
 
   return User.findUserByCredentials(email, password)
     .then((user) => {
-      /*if (!user) {
+      /* if (!user) {
         next(new UnauthorizedError('Пользователь с таким логином/паролем не найден'));
-      }*/
+      } */
       const token = jwt.sign({ _id: user._id }, 'this-is-secret-code', { expiresIn: '7d' });
       res
         .cookie('jwt', token, {
@@ -116,7 +116,7 @@ const login = (req, res, next) => {
           httpOnly: true,
           sameSite: true,
         })
-        .send({ message: 'Успешная авторизация' });
+        .send({ message: 'Авторизация прошла успешно' });
     })
     .catch((err) => {
       if (err.name === 'ValidationError') {
