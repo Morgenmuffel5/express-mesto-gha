@@ -56,11 +56,11 @@ const createNewUser = (req, res, next) => {
             if (err.name === 'ValidationError') {
               next(new BadRequest('Неверный email или пароль'));
             } else if (userAlreadyCreated) {
-              next(new CheckUserError('Пользователь с таким email уже существует'));
+              next(new CheckUserError('Пользователь с таким email уже есть'));
             } else next(err);
           });
       } else {
-        next(new CheckUserError('Пользователь с таким email уже существует'));
+        throw next(new CheckUserError('Пользователь с таким email уже существует'));
       }
     })
     .catch((err) => next(err));

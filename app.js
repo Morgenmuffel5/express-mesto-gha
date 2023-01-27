@@ -21,7 +21,7 @@ mongoose.connect('mongodb://localhost:27017/mestodb', {
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-//роуты, которым не нужна авторизация
+// роуты, которым не нужна авторизация
 app.post('/signin', celebrate({
   body: Joi.object().keys({
     email: Joi.string().required().email(),
@@ -40,12 +40,12 @@ app.post('/signup', celebrate({
 }), createNewUser);
 
 /*app.use(auth);*/
-//роуты, которым нужна авторизация
+// роуты, которым нужна авторизация
 app.use('/users', auth, usersRouter);
 app.use('/cards', auth, cardsRouter);
 
 app.use(errors());
-app.use('*', (_, __, next) => next(new NotFoundError('Такой страници не существует')));
+app.use('*', (_, __, next) => next(new NotFoundError('Такой страницы не существует')));
 
 app.use((error, req, res, next) => {
   if (error.statusCode) {
