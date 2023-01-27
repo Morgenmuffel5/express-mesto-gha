@@ -1,12 +1,6 @@
 const Card = require('../models/card');
-const UnauthorizedError = require('../errors/unauthorizedError');
 const BadRequest = require('../errors/badRequestError');
 const NotFound = require('../errors/notFoundError');
-const CheckUserError = require('../errors/checkObjectError');
-
-const ERROR_INCORRECT_INFO = 400;
-const ERROR_NOT_FOUND = 404;
-const SERVER_ERROR = 500;
 
 const getAllCards = (req, res, next) => {
   Card.find()
