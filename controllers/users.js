@@ -106,9 +106,9 @@ const login = (req, res, next) => {
 
   return User.findUserByCredentials(email, password)
     .then((user) => {
-      if (!user) {
+      /*if (!user) {
         next(new UnauthorizedError('Пользователь с таким логином/паролем не найден'));
-      }
+      }*/
       const token = jwt.sign({ _id: user._id }, 'this-is-secret-code', { expiresIn: '7d' });
       res
         .cookie('jwt', token, {
