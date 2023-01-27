@@ -42,7 +42,7 @@ app.post('/signup', celebrate({
   }),
 }), createNewUser);
 
-app.use((error, _, res, next) => {
+app.use((error, req, res, next) => {
   if (error.statusCode) {
     res.status(error.statusCode).send({ message: error.message });
   } else {
