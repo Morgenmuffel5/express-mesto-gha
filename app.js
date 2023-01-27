@@ -39,7 +39,7 @@ app.post('/signup', celebrate({
   }),
 }), createNewUser);
 
-/*app.use(auth);*/
+/* app.use(auth); */
 // роуты, которым нужна авторизация
 app.use('/users', auth, usersRouter);
 app.use('/cards', auth, cardsRouter);

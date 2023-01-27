@@ -37,8 +37,8 @@ const createNewUser = (req, res, next) => {
 
   return bcrypt
     .hash(password, 10)
-    .then((hash) => {
-      const userAlreadyCreated = User.findOne(({ email: req.body.email }));
+    .then(async (hash) => {
+      const userAlreadyCreated = await User.findOne(({ email: req.body.email }));
       if (!userAlreadyCreated) {
         User.create({
           name,
