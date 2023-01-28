@@ -2,8 +2,6 @@ const mongoose = require('mongoose');
 const validator = require('validator');
 const bcrypt = require('bcryptjs');
 const UnauthorizedError = require('../errors/unauthorizedError');
-const BadRequest = require("../errors/badRequestError");
-const CheckUserError = require("../errors/checkObjectError");
 
 const userSchema = new mongoose.Schema({
   name: {
@@ -25,8 +23,9 @@ const userSchema = new mongoose.Schema({
     validate: {
       validator: (linkValue) => validator.isURL(linkValue),
       message: 'Указана некорретная ссылка',
-    },
-    email: {
+    }
+  },
+  email: {
       type: String,
       required: true,
       unique: true,
@@ -35,12 +34,11 @@ const userSchema = new mongoose.Schema({
         message: 'Указан некорретный email',
       },
     },
-    password: {
+  password: {
       type: String,
       requiered: true,
       select: false,
     },
-  },
 
 });
 
@@ -65,9 +63,3 @@ userSchema.statics.findUserByCredentials = function (email, password) {
 };
 
 module.exports = mongoose.model('user', userSchema);
-
-
-
-
-
-
