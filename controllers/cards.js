@@ -30,10 +30,10 @@ const deleteCard = (req, res, next) => {
       if (!card) {
         next(new NotFound('Карточка не найдена'));
       }
-      if (card.owner !== req.user._id) {
+      if (!card.owner.equals(req.user._id)) {
         next(new NotOwner('Попытка удалить чужую карточку'));
       } else {
-        card.remove().then(() => res.status(200).send({ data: card }));
+        card.remove().then(() => res.status(200).send({ data: card }).catch(next));
       }
     })
     .catch((err) => {
