@@ -50,7 +50,7 @@ const createNewUser = (req, res, next) => {
       res.send({ data: newUser });
     })
     .catch((err) => {
-      if (err instanceof Error.ValidationError) {
+      if (err.name === 'ValidationError') {
         next(new BadRequest('Неверный email или пароль'));
       } else if (err.code === 11000) {
         next(new CheckUserError('Пользователь с таким email уже есть'));
