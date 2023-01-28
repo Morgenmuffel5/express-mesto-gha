@@ -114,7 +114,7 @@ const login = (req, res, next) => {
     });
 };
 
-function getCurrentUser(req, res, next,) {
+function getCurrentUser(req, res, next) {
   User.findById(req.user._id)
     .then((userData) => {
       if (userData) {
