@@ -15,15 +15,17 @@ const getUserList = (req, res, next) => {
 };
 
 const getUserById = (req, res, next) => {
-  User.findById(req.params.userId)
-    .then((userInfo) => {
-      if (userInfo) {
-        res.status(200).send(userInfo);
+  User.findById(req.params)
+    .then((userData) => {
+      if (userData) {
+        res.send({data: userData});
+      } else {
+        next(new NotFound('Пользователь не найден'));
       }
     })
     .catch((err) => {
-      if (err.name === 'CastError') {
-        next(new BadRequest('Некорректный id пользователя'));
+      if (err instanceof Error.CastError) {
+        next(new BadRequest('Некорректный _id пользователя'));
       } else {
         next(err);
       }
@@ -47,7 +49,7 @@ const createNewUser = (req, res, next) => {
     .then((data) => {
       const newUser = JSON.parse(JSON.stringify(data));
       delete newUser.password;
-      res.send({ data: newUser });
+      res.send({data: newUser});
     })
     .catch((err) => {
       if (err.name === 'ValidationError') {
@@ -61,11 +63,11 @@ const createNewUser = (req, res, next) => {
 };
 
 const updateUserInfo = (req, res, next) => {
-  const { name, about } = req.body;
+  const {name, about} = req.body;
   User.findByIdAndUpdate(
     req.user._id,
-    { name, about },
-    { new: true, runValidators: true },
+    {name, about},
+    {new: true, runValidators: true},
   )
     .then((userInfo) => res.status(200).send(userInfo))
     .catch((err) => {
@@ -82,7 +84,7 @@ const updateUserInfo = (req, res, next) => {
 
 const changeAvatar = (req, res, next) => {
   const { avatar } = req.body;
-  User.findByIdAndUpdate(req.user._id, { avatar }, { returnDocument: 'after' })
+  User.findByIdAndUpdate(req.user._id, {avatar}, {returnDocument: 'after'})
     .then((userInfo) => res.status(200).send(userInfo))
     .catch((err) => {
       if (err.name === 'ValidationError') {
@@ -100,14 +102,14 @@ const login = (req, res, next) => {
 
   return User.findUserByCredentials(email, password)
     .then((user) => {
-      const token = jwt.sign({ _id: user._id }, 'this-is-secret-code', { expiresIn: '7d' });
+      const token = jwt.sign({_id: user._id}, 'this-is-secret-code', {expiresIn: '7d'});
       res
         .cookie('token', token, {
           maxAge: 3600000 * 24 * 7,
           httpOnly: true,
           sameSite: true,
         })
-        .send({ message: 'Авторизация прошла успешно' });
+        .send({message: 'Авторизация прошла успешно'});
     })
     .catch((err) => {
       if (err.name === 'ValidationError') {
@@ -120,7 +122,7 @@ function getCurrentUser(req, res, next,) {
   User.findById(req.user._id,)
     .then((userData) => {
       if (userData) {
-        res.send({ data: userData });
+        res.send({data: userData});
       } else {
         next(new NotFound('Пользователь не найден'));
       }
