@@ -40,7 +40,7 @@ const createNewUser = (req, res, next) => {
   bcrypt
     .hash(password, 10)
     .then((hash) => User.create({
-      email, password: hash, name, about, avatar
+      email, password: hash, name, about, avatar,
     }))
     .then((data) => {
       const newUser = JSON.parse(JSON.stringify(data));
@@ -100,7 +100,7 @@ const login = (req, res, next) => {
     .then((user) => {
       const token = jwt.sign({ _id: user._id }, 'this-is-secret-code', { expiresIn: '7d' });
       res
-        .cookie('token', token, {
+        .cookie('jwt', token, {
           maxAge: 3600000 * 24 * 7,
           httpOnly: true,
           sameSite: true,
