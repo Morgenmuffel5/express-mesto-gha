@@ -32,38 +32,32 @@ const getUserById = (req, res, next) => {
 
 const createNewUser = (req, res, next) => {
   const {
-    name, about, avatar, email, password,
+    email, password, name, about, avatar,
   } = req.body;
 
-  return bcrypt
+  bcrypt
     .hash(password, 10)
-    .then(async (hash) => {
-      const userAlreadyCreated = await User.findOne(({ email: req.body.email }));
-      if (!userAlreadyCreated) {
-        User.create({
-          name,
-          about,
-          avatar,
-          email,
-          password: hash,
-        }).then((user) => res.status(200).send({
-          name: user.name,
-          about: user.about,
-          avatar,
-          email: user.email,
-        }))
-          .catch((err) => {
-            if (err.name === 'ValidationError') {
-              next(new BadRequest('Неверный email или пароль'));
-            } else if (userAlreadyCreated) {
-              next(new CheckUserError('Пользователь с таким email уже есть'));
-            } else next(err);
-          });
-      } else {
-        throw next(new CheckUserError('Пользователь с таким email уже существует'));
-      }
+    .then((hash) => User.create({
+      email,
+      password: hash,
+      name,
+      about,
+      avatar,
+    }))
+    .then((data) => {
+      const newUser = JSON.parse(JSON.stringify(data));
+      delete newUser.password;
+      res.send({ data: newUser });
     })
-    .catch((err) => next(err));
+    .catch((err) => {
+      if (err instanceof Error.ValidationError) {
+        next(new BadRequest('Неверный email или пароль'));
+      } else if (err.code === 11000) {
+        next(new CheckUserError('Пользователь с таким email уже есть'));
+      } else {
+        next(err);
+      }
+    });
 };
 
 const updateUserInfo = (req, res, next) => {
@@ -106,9 +100,6 @@ const login = (req, res, next) => {
 
   return User.findUserByCredentials(email, password)
     .then((user) => {
-      /* if (!user) {
-        next(new UnauthorizedError('Пользователь с таким логином/паролем не найден'));
-      } */
       const token = jwt.sign({ _id: user._id }, 'this-is-secret-code', { expiresIn: '7d' });
       res
         .cookie('jwt', token, {
