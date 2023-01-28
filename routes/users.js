@@ -9,7 +9,7 @@ const {
   getUserById,
   createNewUser,
   updateUserInfo,
-  changeAvatar,
+  changeAvatar, getCurrentUser,
 } = require('../controllers/users');
 
 userRouter.get('/', getUserList);
@@ -35,7 +35,7 @@ userRouter.get('/me', celebrate({
     name: Joi.string().min(2).max(30),
     about: Joi.string().min(2).max(30),
   }),
-}), updateUserInfo);
+}), getCurrentUser);
 
 // проверка данных перед отправкой
 userRouter.patch('/me/avatar', celebrate({
