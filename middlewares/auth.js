@@ -8,10 +8,10 @@ module.exports = (req, res, next) => {
     next(new UnauthorizedError('Пользователь не авторизован'));
   } */
 
-  const token = req.cookie.find((item) => item.match('token')) ? req.cookie.find((item) => item.match('token')).replace('token=', '') : '';
+  const token = req.rawHeaders.find((el) => el.match('token')) ? req.rawHeaders.find((el) => el.match('token')).replace('token=', '') : 0;
 
   if (token === '') {
-    next(new UnauthorizedError('Пользователь не авторизован'));
+    throw new UnauthorizedError('Пользователь не авторизован');
   }
 
   let payload;
@@ -20,10 +20,9 @@ module.exports = (req, res, next) => {
     payload = jwt.verify(token, 'this-is-secret-code');
   } catch (err) {
     next(new UnauthorizedError('Пользователь не авторизован'));
-    return;
   }
 
   req.user = payload;
 
-  next();
+ return next();
 };
