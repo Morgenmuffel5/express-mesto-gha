@@ -11,6 +11,8 @@ const NotFoundError = require('./errors/notFoundError');
 const { PORT = 3000 } = process.env;
 const app = express();
 
+const cookieParser = require('cookie-parser');
+
 const linkCheck = /(https?:\/\/)(w{3}\.)?([a-zA-Z0-9-]{0,63}\.)([a-zA-Z]{2,4})(\/[\w\-._~:/?#[\]@!$&'()*+,;=]#?)?/;
 
 mongoose.set('strictQuery', false);
@@ -20,6 +22,7 @@ mongoose.connect('mongodb://127.0.0.1:27017/mestodb', {
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(cookieParser());
 
 // роуты, которым не нужна авторизация
 app.post('/signin', celebrate({

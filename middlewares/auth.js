@@ -2,9 +2,9 @@ const jwt = require('jsonwebtoken');
 const UnauthorizedError = require('../errors/unauthorizedError');
 
 module.exports = (req, res, next) => {
-  const token = req.rawHeaders.find((el) => el.match('token')) ? req.rawHeaders.find((el) => el.match('token')).replace('token=', '') : '';
+  const { token } = req.cookie;
 
-  if (token === '') {
+  if (!token) {
     throw new UnauthorizedError('Пользователь не авторизован');
   }
 
