@@ -17,7 +17,11 @@ userRouter.get('/', getUserList);
 userRouter.get('/me', getCurrentUser);
 
 // проверка данных перед отправкой
-userRouter.get('/:userId', getUserById);
+userRouter.get('/:userId', celebrate({
+  params: Joi.object().keys({
+    userId: Joi.string().length(24).hex().required(),
+  }),
+}), getUserById);
 
 userRouter.post('/', createNewUser);
 
