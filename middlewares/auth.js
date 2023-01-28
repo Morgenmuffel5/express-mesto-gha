@@ -7,11 +7,10 @@ module.exports = (req, res, next) => {
   if (!authorization || !authorization.startsWith('Bearer ')) {
     next(new UnauthorizedError('Пользователь не авторизован'));
   } */
-  const { cookie } = req.headers;
 
-  const token = cookie.find((obj) => obj.match('token')).replace('token=', '');
+  const token = req.cookie.find((item) => item.match('token')) ? req.cookie.find((item) => item.match('token')).replace('token=', '') : '';
 
-  if (!token) {
+  if (token === '') {
     next(new UnauthorizedError('Пользователь не авторизован'));
   }
 
@@ -28,4 +27,3 @@ module.exports = (req, res, next) => {
 
   next();
 };
-
