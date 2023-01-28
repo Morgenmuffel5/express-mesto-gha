@@ -15,7 +15,7 @@ const getUserList = (req, res, next) => {
 };
 
 const getUserById = (req, res, next) => {
-  User.findById(req.params._id)
+  User.findById(req.params.userId)
     .then((userData) => {
       if (userData) {
         res.send({ data: userData });
