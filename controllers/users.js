@@ -116,16 +116,23 @@ const login = (req, res, next) => {
     });
 };
 
-const getCurrentUser = (req, res, next) => {
-  User.findById(req.user._id)
-    .then((user) => {
-      if (!user) {
-        throw new NotFound('Запрашиваемый пользователь не найден');
+function getCurrentUser(req, res, next,) {
+  User.findById(req.user._id,)
+    .then((userData) => {
+      if (userData) {
+        res.send({ data: userData });
+      } else {
+        next(new NotFound('Пользователь не найден'));
       }
-      return res.status(200).send({ data: user });
     })
-    .catch((err) => next(err));
-};
+    .catch((err) => {
+      if (err instanceof Error.CastError) {
+        next(new BadRequest('Передан некорректный _id пользователя'));
+      } else {
+        next(err);
+      }
+    });
+}
 
 module.exports = {
   getUserList,

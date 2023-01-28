@@ -9,10 +9,13 @@ const {
   getUserById,
   createNewUser,
   updateUserInfo,
-  changeAvatar, getCurrentUser,
+  changeAvatar,
+  getCurrentUser,
 } = require('../controllers/users');
 
 userRouter.get('/', getUserList);
+userRouter.get('/me', getCurrentUser);
+
 // проверка данных перед отправкой
 userRouter.get('/:userId', celebrate({
   params: Joi.object().keys({
@@ -29,8 +32,6 @@ userRouter.patch('/me', celebrate({
     about: Joi.string().min(2).max(30),
   }),
 }), updateUserInfo);
-
-userRouter.get('/me', getCurrentUser);
 
 // проверка данных перед отправкой
 userRouter.patch('/me/avatar', celebrate({
