@@ -30,12 +30,7 @@ userRouter.patch('/me', celebrate({
   }),
 }), updateUserInfo);
 
-userRouter.get('/me', celebrate({
-  body: Joi.object().keys({
-    name: Joi.string().min(2).max(30),
-    about: Joi.string().min(2).max(30),
-  }),
-}), getCurrentUser);
+userRouter.get('/me', getCurrentUser);
 
 // проверка данных перед отправкой
 userRouter.patch('/me/avatar', celebrate({
