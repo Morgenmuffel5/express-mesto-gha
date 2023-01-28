@@ -40,11 +40,7 @@ const createNewUser = (req, res, next) => {
   bcrypt
     .hash(password, 10)
     .then((hash) => User.create({
-      email,
-      password: hash,
-      name,
-      about,
-      avatar,
+      email, password: hash, name, about, avatar,
     }))
     .then((data) => {
       const newUser = JSON.parse(JSON.stringify(data));
@@ -84,7 +80,7 @@ const updateUserInfo = (req, res, next) => {
 
 const changeAvatar = (req, res, next) => {
   const { avatar } = req.body;
-  User.findByIdAndUpdate(req.user._id, { avatar }, {returnDocument: 'after'})
+  User.findByIdAndUpdate(req.user._id, { avatar }, { returnDocument: 'after' })
     .then((userInfo) => res.status(200).send(userInfo))
     .catch((err) => {
       if (err.name === 'ValidationError') {
@@ -128,7 +124,7 @@ function getCurrentUser(req, res, next,) {
       }
     })
     .catch((err) => {
-      if (err instanceof Error.CastError) {
+      if (err.name === 'ValidationError') {
         next(new BadRequest('Передан некорректный _id пользователя'));
       } else {
         next(err);

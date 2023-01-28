@@ -2,6 +2,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const { celebrate, Joi, errors } = require('celebrate');
+const cookieParser = require('cookie-parser');
 const usersRouter = require('./routes/users');
 const cardsRouter = require('./routes/cards');
 const auth = require('./middlewares/auth');
@@ -10,8 +11,6 @@ const NotFoundError = require('./errors/notFoundError');
 
 const { PORT = 3000 } = process.env;
 const app = express();
-
-const cookieParser = require('cookie-parser');
 
 const linkCheck = /(https?:\/\/)(w{3}\.)?([a-zA-Z0-9-]{0,63}\.)([a-zA-Z]{2,4})(\/[\w\-._~:/?#[\]@!$&'()*+,;=]#?)?/;
 
