@@ -42,7 +42,7 @@ app.post('/signup', celebrate({
 }), createNewUser);
 
 // роуты, которым нужна авторизация
-app.use('/users', usersRouter);
+app.use('/users', auth, usersRouter);
 app.use('/cards', auth, cardsRouter);
 
 app.use(errors());
