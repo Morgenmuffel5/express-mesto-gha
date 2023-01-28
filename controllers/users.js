@@ -40,7 +40,7 @@ const createNewUser = (req, res, next) => {
   bcrypt
     .hash(password, 10)
     .then((hash) => User.create({
-      email, password: hash, name, about, avatar,
+      email, password: hash, name, about, avatar
     }))
     .then((data) => {
       const newUser = JSON.parse(JSON.stringify(data));
