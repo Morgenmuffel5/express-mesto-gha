@@ -23,27 +23,26 @@ const userSchema = new mongoose.Schema({
     validate: {
       validator: (linkValue) => validator.isURL(linkValue),
       message: 'Указана некорретная ссылка',
-    }
+    },
   },
   email: {
-      type: String,
-      required: true,
-      unique: true,
-      validate: {
-        validator: (emailValue) => validator.isEmail(emailValue),
-        message: 'Указан некорретный email',
-      },
+    type: String,
+    required: true,
+    unique: true,
+    validate: {
+      validator: (emailValue) => validator.isEmail(emailValue),
+      message: 'Указан некорретный email',
     },
+  },
   password: {
-      type: String,
-      requiered: true,
-      select: false,
-    },
-
+    type: String,
+    requiered: true,
+    select: false,
+  },
 });
 
 userSchema.statics.findUserByCredentials = function (email, password) {
-  return this.findOne({ email })
+  return this.findOne({email})
     .select('+password')
     .then((userData) => {
       if (!userData) {
