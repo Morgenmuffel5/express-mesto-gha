@@ -5,7 +5,7 @@ const NotOwner = require('../errors/notOwenError');
 
 const getAllCards = (req, res, next) => {
   Card.find()
-    .then((cardList) => res.status(200).send({ data: cardList }))
+    .then((cardList) => res.send({ data: cardList }))
     .catch((err) => next(err));
 };
 
@@ -29,11 +29,10 @@ const deleteCard = (req, res, next) => {
     .then((card) => {
       if (!card) {
         next(new NotFound('Карточка не найдена'));
-      }
-      if (!card.owner.equals(req.user._id)) {
+      } else if (!card.owner.equals(req.user._id)) {
         next(new NotOwner('Попытка удалить чужую карточку'));
       } else {
-        card.remove().then(() => res.status(200).send({ data: card }).catch(next));
+        card.remove().then(() => res.status(200).send({ data: card }));
       }
     })
     .catch((err) => {

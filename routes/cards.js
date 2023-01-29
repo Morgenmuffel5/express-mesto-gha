@@ -1,8 +1,7 @@
 const cardsRouter = require('express').Router();
 const { celebrate, Joi } = require('celebrate');
-
 /* проверка ссылки */
-const linkCheck = /(https?:\/\/)(w{3}\.)?([a-zA-Z0-9-]{0,63}\.)([a-zA-Z]{2,4})(\/[\w\-._~:/?#[\]@!$&'()*+,;=]#?)?/;
+const linkCheck = require('../constants/constants');
 
 const {
   getAllCards,

@@ -8,11 +8,10 @@ const cardsRouter = require('./routes/cards');
 const auth = require('./middlewares/auth');
 const { login, createNewUser } = require('./controllers/users');
 const NotFoundError = require('./errors/notFoundError');
+const linkCheck = require('./constants/constants');
 
 const { PORT = 3000 } = process.env;
 const app = express();
-
-const linkCheck = /(https?:\/\/)(w{3}\.)?([a-zA-Z0-9-]{0,63}\.)([a-zA-Z]{2,4})(\/[\w\-._~:/?#[\]@!$&'()*+,;=]#?)?/;
 
 mongoose.set('strictQuery', false);
 mongoose.connect('mongodb://127.0.0.1:27017/mestodb', {
@@ -41,18 +40,22 @@ app.post('/signup', celebrate({
   }),
 }), createNewUser);
 
+app.get('/signout', (req, res) => {
+  res.clearCookie('jwt').send({ message: 'Вы вышли из аккаунта' });
+});
+
 // роуты, которым нужна авторизация
 app.use('/users', auth, usersRouter);
 app.use('/cards', auth, cardsRouter);
 
 app.use(errors());
-app.use('*', (_, __, next) => next(new NotFoundError('Такой страницы не существует')));
+app.use('*', auth, (_, __, next) => next(new NotFoundError('Такой страницы не существует')));
 
 app.use((error, req, res, next) => {
   if (error.statusCode) {
     res.status(error.statusCode).send({ message: error.message });
   } else {
-    res.status(500).send({ message: `Ошибка сервера: ${error.message}` });
+    res.status(500).send({ message: `Ошибка сервера` });
   }
   next();
 });

@@ -9,7 +9,7 @@ const CheckUserError = require('../errors/checkObjectError');
 const getUserList = (req, res, next) => {
   User.find()
     .then((usersInfo) => {
-      res.status(200).send(usersInfo);
+      res.send(usersInfo);
     })
     .catch((err) => next(err));
 };
@@ -65,13 +65,19 @@ const updateUserInfo = (req, res, next) => {
     { name, about },
     { new: true, runValidators: true },
   )
-    .then((userInfo) => res.status(200).send(userInfo))
+    .then((userInfo) => {
+      if (!userInfo) {
+        next(new NotFound('Пользователь с указанным _id не найден'));
+      } else {
+        res.status(200).send(userInfo);
+      }
+    })
     .catch((err) => {
       if (err.name === 'ValidationError') {
         next(new BadRequest('Переданы некорректные данные пользователя'));
       }
       if (err.name === 'CastError') {
-        next(new NotFound('Пользователь с указанным _id не найден'));
+        next(new BadRequest('Передан некорректный id пользователя'));
       } else {
         next(err);
       }
@@ -81,12 +87,18 @@ const updateUserInfo = (req, res, next) => {
 const changeAvatar = (req, res, next) => {
   const { avatar } = req.body;
   User.findByIdAndUpdate(req.user._id, { avatar }, { returnDocument: 'after' })
-    .then((userInfo) => res.status(200).send(userInfo))
+    .then((userInfo) => {
+      if (!userInfo) {
+        next(new NotFound('Пользователь с указанным _id не найден'));
+      } else {
+        res.status(200).send(userInfo);
+      }
+    })
     .catch((err) => {
       if (err.name === 'ValidationError') {
         next(new BadRequest('Переданы некорректные данные для обновлении аватара'));
       } else if (err.name === 'CastError') {
-        next(new NotFound('Пользователь с указанным _id не найден'));
+        next(new BadRequest('Передан некорректный id пользователя'));
       } else {
         next(err);
       }
@@ -108,9 +120,7 @@ const login = (req, res, next) => {
         .send({ message: 'Авторизация прошла успешно' });
     })
     .catch((err) => {
-      if (err.name === 'ValidationError') {
-        next(new BadRequest('Пользователь с таким логином/паролем не найден'));
-      } else next(err);
+      next(err);
     });
 };
 
@@ -124,11 +134,7 @@ function getCurrentUser(req, res, next) {
       }
     })
     .catch((err) => {
-      if (err.name === 'ValidationError') {
-        next(new BadRequest('Передан некорректный _id пользователя'));
-      } else {
-        next(err);
-      }
+      next(err);
     });
 }
 

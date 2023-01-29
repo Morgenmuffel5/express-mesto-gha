@@ -1,13 +1,10 @@
 const userRouter = require('express').Router();
 const { celebrate, Joi } = require('celebrate');
-
-/* проверка ссылки */
-const linkCheck = /(https?:\/\/)(w{3}\.)?([a-zA-Z0-9-]{0,63}\.)([a-zA-Z]{2,4})(\/[\w\-._~:/?#[\]@!$&'()*+,;=]#?)?/;
+const linkCheck = require('../constants/constants');
 
 const {
   getUserList,
   getUserById,
-  createNewUser,
   updateUserInfo,
   changeAvatar,
   getCurrentUser,
@@ -22,8 +19,6 @@ userRouter.get('/:userId', celebrate({
     userId: Joi.string().length(24).hex().required(),
   }),
 }), getUserById);
-
-userRouter.post('/', createNewUser);
 
 // проверка данных перед отправкой
 userRouter.patch('/me', celebrate({
