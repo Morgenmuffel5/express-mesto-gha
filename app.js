@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const { celebrate, Joi, errors } = require('celebrate');
 const cookieParser = require('cookie-parser');
+const { requestLogger, errorLogger } = require('./middlewares/loggers');
 const usersRouter = require('./routes/users');
 const cardsRouter = require('./routes/cards');
 const auth = require('./middlewares/auth');
@@ -21,6 +22,8 @@ mongoose.connect('mongodb://127.0.0.1:27017/mestodb', {
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
+
+app.use(requestLogger);
 
 // роуты, которым не нужна авторизация
 app.post('/signin', celebrate({
@@ -47,6 +50,8 @@ app.get('/signout', (req, res) => {
 // роуты, которым нужна авторизация
 app.use('/users', auth, usersRouter);
 app.use('/cards', auth, cardsRouter);
+
+app.use(errorLogger);
 
 app.use(errors());
 app.use('*', auth, (_, __, next) => next(new NotFoundError('Такой страницы не существует')));
