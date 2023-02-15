@@ -11,6 +11,7 @@ const auth = require('./middlewares/auth');
 const { login, createNewUser } = require('./controllers/users');
 const NotFoundError = require('./errors/notFoundError');
 const linkCheck = require('./constants/constants');
+const cors = require('./middlewares/cors');
 
 const { PORT = 3000 } = process.env;
 const app = express();
@@ -26,6 +27,7 @@ app.use(cookieParser());
 
 app.use(requestLogger);
 
+app.use(cors);
 app.get('/crash-test', () => {
   setTimeout(() => {
     throw new Error('Сервер сейчас упадёт');
