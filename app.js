@@ -11,13 +11,13 @@ const auth = require('./middlewares/auth');
 const { login, createNewUser } = require('./controllers/users');
 const NotFoundError = require('./errors/notFoundError');
 const linkCheck = require('./constants/constants');
-/* const cors = require('./middlewares/cors'); */
-const cors = require('cors');
+const cors = require('./middlewares/cors');
+/* const cors = require('cors'); */
 
 const { PORT = 3000 } = process.env;
 const app = express();
 
-const allowedCors = {
+/* const allowedCors = {
   origin: [
     'https://morgenmuffel.study.nomoredomains.work',
     'http://morgenmuffel.study.nomoredomains.work',
@@ -30,7 +30,7 @@ const allowedCors = {
   allowedHeaders: ['Content-Type', 'origin', 'Authorization'],
   credentials: true,
 };
-app.use('*', cors(allowedCors));
+app.use('*', cors(allowedCors)); */
 
 mongoose.set('strictQuery', false);
 mongoose.connect('mongodb://127.0.0.1:27017/mestodb', {
