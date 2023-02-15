@@ -5,6 +5,7 @@ const User = require('../models/user');
 const BadRequest = require('../errors/badRequestError');
 const NotFound = require('../errors/notFoundError');
 const CheckUserError = require('../errors/checkObjectError');
+
 const { NODE_ENV, JWT_SECRET } = process.env;
 
 const getUserList = (req, res, next) => {
@@ -111,7 +112,7 @@ const login = (req, res, next) => {
 
   return User.findUserByCredentials(email, password)
     .then((user) => {
-      const token = jwt.sign({ _id: user._id }, NODE_ENV === 'server' ? JWT_SECRET : 'dev-super-secret', { expiresIn: '7d' });
+      const token = jwt.sign({ _id: user._id }, NODE_ENV === 'production' ? JWT_SECRET : 'dev-super-secret', { expiresIn: '7d' });
       res
         .cookie('jwt', token, {
           maxAge: 3600000 * 24 * 7,
