@@ -25,6 +25,12 @@ app.use(cookieParser());
 
 app.use(requestLogger);
 
+app.get('/crash-test', () => {
+  setTimeout(() => {
+    throw new Error('Сервер сейчас упадёт');
+  }, 0);
+});
+
 // роуты, которым не нужна авторизация
 app.post('/signin', celebrate({
   body: Joi.object().keys({
