@@ -113,13 +113,14 @@ const login = (req, res, next) => {
   return User.findUserByCredentials(email, password)
     .then((user) => {
       const token = jwt.sign({ _id: user._id }, NODE_ENV === 'production' ? JWT_SECRET : 'dev-super-secret', { expiresIn: '7d' });
-      res
+      /* res
         .cookie('jwt', token, {
           maxAge: 3600000 * 24 * 7,
           httpOnly: true,
           sameSite: true,
         })
-        .send({ message: 'Авторизация прошла успешно' });
+        .send({ message: 'Авторизация прошла успешно' }); */
+      res.send({ token, email });
     })
     .catch((err) => {
       next(err);
