@@ -12,25 +12,12 @@ const { login, createNewUser } = require('./controllers/users');
 const NotFoundError = require('./errors/notFoundError');
 const linkCheck = require('./constants/constants');
  const cors = require('./middlewares/cors');
-/*const cors = require('cors');*/
+
 
 const { PORT = 3000 } = process.env;
 const app = express();
 
- /*const allowedCors = {
-  origin: [
-    'https://morgenmuffel.study.nomoredomains.work',
-    'http://morgenmuffel.study.nomoredomains.work',
-    'http://localhost:3000',
-    'https://localhost:3000',
-  ],
-  methods: ['GET', 'HEAD', 'PUT', 'PATCH', 'POST', 'DELETE'],
-  preflightContinue: false,
-  optionsSuccessStatus: 204,
-  allowedHeaders: ['Content-Type', 'Origin', 'Authorization'],
-  credentials: true,
-};*/
-/*app.use('*', cors(allowedCors));*/
+
 
 mongoose.set('strictQuery', false);
 mongoose.connect('mongodb://127.0.0.1:27017/mestodb', {
