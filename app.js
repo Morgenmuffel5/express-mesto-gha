@@ -11,8 +11,8 @@ const auth = require('./middlewares/auth');
 const { login, createNewUser } = require('./controllers/users');
 const NotFoundError = require('./errors/notFoundError');
 const linkCheck = require('./constants/constants');
-const cors = require('./middlewares/cors');
-/* const cors = require('cors'); */
+/* const cors = require('./middlewares/cors'); */
+const cors = require('cors');
 
 const { PORT = 3000 } = process.env;
 const app = express();
