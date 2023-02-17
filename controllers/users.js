@@ -120,7 +120,7 @@ const login = (req, res, next) => {
           sameSite: true,
         })
         .send({ message: 'Авторизация прошла успешно' }); */
-      res.send({ token, email });
+      res.send({ token, user });
     })
     .catch((err) => {
       next(err);
