@@ -1,35 +1,37 @@
 {
   "name": "express-mesto-gha",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "scripts": {
-    "start": "node app.js",
-    "dev": "nodemon app.js",
-    "lint": "npx eslint ."
-  },
-  "keywords": [],
-  "author": "Morgenmuffel",
-  "license": "ISC",
+  "version": "0.1.0",
+  "private": true,
   "dependencies": {
     "bcryptjs": "^2.4.3",
-    "body-parser": "^1.20.1",
     "celebrate": "^15.0.1",
-    "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
     "dotenv": "^16.0.3",
-    "eslint-config-airbnb": "^19.0.4",
     "express": "^4.18.2",
     "express-winston": "^4.2.0",
     "jsonwebtoken": "^9.0.0",
-    "mongoose": "^6.9.0",
+    "mongoose": "^6.8.3",
     "validator": "^13.7.0",
     "winston": "^3.8.2"
   },
+  "scripts": {
+    "lint": "npx eslint .",
+    "start": "node app.js",
+    "dev": "nodemon app.js"
+  },
+  "description": "",
+  "main": "app.js",
+  "repository": {
+    "type": "git",
+    "url": ""
+  },
+  "author": "Morgenmuffel",
+  "license": "ISC",
   "devDependencies": {
-    "eslint": "^8.31.0",
+    "eslint": "^8.33.0",
     "eslint-config-airbnb-base": "^15.0.0",
-    "eslint-plugin-import": "^2.27.4",
+    "eslint-plugin-import": "^2.26.0",
     "nodemon": "^2.0.20"
-  }
+  },
+  "keywords": []
 }

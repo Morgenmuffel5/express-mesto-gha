@@ -39,3 +39,4 @@ cardsRouter.delete('/:cardId/likes', celebrate({
 }), deleteLike);
 
 module.exports = cardsRouter;
+

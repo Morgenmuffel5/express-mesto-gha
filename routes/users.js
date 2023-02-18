@@ -10,17 +10,18 @@ const {
   getCurrentUser,
 } = require('../controllers/users');
 
-userRouter.get('/', getUserList);
 userRouter.get('/me', getCurrentUser);
+userRouter.get('/', getUserList);
 
 // проверка данных перед отправкой
 userRouter.get('/:userId', celebrate({
-  params: Joi.object().keys({
-    userId: Joi.string().length(24).hex().required(),
+    params: Joi.object().keys({
+      userId: Joi.string().length(24).hex().required(),
+    }),
   }),
-}), getUserById);
+  getUserById,
+);
 
-// проверка данных перед отправкой
 userRouter.patch('/me', celebrate({
   body: Joi.object().keys({
     name: Joi.string().min(2).max(30),
@@ -28,8 +29,7 @@ userRouter.patch('/me', celebrate({
   }),
 }), updateUserInfo);
 
-// проверка данных перед отправкой
-userRouter.patch('/me/avatar', celebrate({
+userRouter.patch('/me/avatar',  celebrate({
   body: Joi.object().keys({
     avatar: Joi.string().pattern(linkCheck),
   }),

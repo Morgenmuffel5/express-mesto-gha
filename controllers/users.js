@@ -1,7 +1,6 @@
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const User = require('../models/user');
-/* const UnauthorizedError = require('../errors/unauthorizedError'); */
 const BadRequest = require('../errors/badRequestError');
 const NotFound = require('../errors/notFoundError');
 const CheckUserError = require('../errors/checkObjectError');
@@ -9,18 +8,16 @@ const CheckUserError = require('../errors/checkObjectError');
 const { NODE_ENV, JWT_SECRET } = process.env;
 
 const getUserList = (req, res, next) => {
-  User.find()
-    .then((usersInfo) => {
-      res.send(usersInfo);
-    })
-    .catch((err) => next(err));
+  User.find({})
+    .then((users) => res.send({ data: users }))
+    .catch(next);
 };
 
 const getUserById = (req, res, next) => {
   User.findById(req.params.userId)
-    .then((userData) => {
-      if (userData) {
-        res.send({ data: userData });
+    .then((user) => {
+      if (user) {
+        res.send({ data: user });
       } else {
         next(new NotFound('Пользователь не найден'));
       }
@@ -34,21 +31,50 @@ const getUserById = (req, res, next) => {
     });
 };
 
+const getCurrentUser = (req, res, next) => {
+  User.findById(req.user._id)
+    .then((user) => {
+      if (user) {
+        res.send({ data: user });
+      } else {
+        next(new NotFound('Пользователь не найден'));
+      }
+    })
+    .catch(next);
+};
+
+const login = (req, res, next) => {
+  const { email, password } = req.body;
+
+  return User.findUserByCredentials(email, password)
+    .then((user) => {
+      const token = jwt.sign(
+        { _id: user._id },
+        NODE_ENV === 'production' ? JWT_SECRET : 'super-strong-secret',
+        { expiresIn: '7d' },
+      );
+      res.send({ token });
+    })
+    .catch(next);
+};
+
 const createNewUser = (req, res, next) => {
   const {
-    email, password, name, about, avatar,
+    name, about, avatar, email, password,
   } = req.body;
-
   bcrypt
     .hash(password, 10)
     .then((hash) => User.create({
-      email, password: hash, name, about, avatar,
+      name, about, avatar, email, password: hash,
     }))
-    .then((data) => {
-      const newUser = JSON.parse(JSON.stringify(data));
-      delete newUser.password;
-      res.send({ data: newUser });
-    })
+    .then((userdata) => res
+      .status('201').send({
+        name: userdata.name,
+        about: userdata.about,
+        avatar: userdata.avatar,
+        email: userdata.email,
+        _id: userdata._id,
+      }))
     .catch((err) => {
       if (err.name === 'ValidationError') {
         next(new BadRequest('Неверный email или пароль'));
@@ -61,17 +87,20 @@ const createNewUser = (req, res, next) => {
 };
 
 const updateUserInfo = (req, res, next) => {
-  const { name, about } = req.body;
+  const {name, about} = req.body;
   User.findByIdAndUpdate(
     req.user._id,
-    { name, about },
-    { new: true, runValidators: true },
+    {name, about},
+    {
+      new: true,
+      runValidators: true
+    },
   )
-    .then((userInfo) => {
-      if (!userInfo) {
-        next(new NotFound('Пользователь с указанным _id не найден'));
+    .then((user) => {
+      if (user) {
+        res.send({data: user});
       } else {
-        res.status(200).send(userInfo);
+        next(new NotFound('Пользователь с указанным _id не найден'));
       }
     })
     .catch((err) => {
@@ -83,17 +112,23 @@ const updateUserInfo = (req, res, next) => {
       } else {
         next(err);
       }
-    });
-};
+    })
+}
 
-const changeAvatar = (req, res, next) => {
+  const changeAvatar = (req, res, next) => {
   const { avatar } = req.body;
-  User.findByIdAndUpdate(req.user._id, { avatar }, { returnDocument: 'after' })
-    .then((userInfo) => {
-      if (!userInfo) {
-        next(new NotFound('Пользователь с указанным _id не найден'));
+
+  User.findByIdAndUpdate(
+    req.user._id,
+    { avatar },
+    { new: true,
+      runValidators: true },
+  )
+    .then((user) => {
+      if (user) {
+        res.send({ data: user });
       } else {
-        res.status(200).send(userInfo);
+        next(new NotFound('Пользователь с указанным _id не найден'));
       }
     })
     .catch((err) => {
@@ -106,40 +141,6 @@ const changeAvatar = (req, res, next) => {
       }
     });
 };
-
-const login = (req, res, next) => {
-  const { email, password } = req.body;
-
-  return User.findUserByCredentials(email, password)
-    .then((user) => {
-      const token = jwt.sign({ _id: user._id }, NODE_ENV === 'production' ? JWT_SECRET : 'dev-super-secret', { expiresIn: '7d' });
-      /* res
-        .cookie('jwt', token, {
-          maxAge: 3600000 * 24 * 7,
-          httpOnly: true,
-          sameSite: true,
-        })
-        .send({ message: 'Авторизация прошла успешно' }); */
-      res.send({ token, user });
-    })
-    .catch((err) => {
-      next(err);
-    });
-};
-
-function getCurrentUser(req, res, next) {
-  User.findById(req.user._id)
-    .then((userData) => {
-      if (userData) {
-        res.send({ data: userData });
-      } else {
-        next(new NotFound('Пользователь не найден'));
-      }
-    })
-    .catch((err) => {
-      next(err);
-    });
-}
 
 module.exports = {
   getUserList,

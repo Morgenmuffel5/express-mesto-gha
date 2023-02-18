@@ -1,3 +1,7 @@
+# http://editorconfig.org
+
+# A special property that should be specified at the top of the file outside of
+# any sections. Set to true to stop .editor config file search on current file
 root = true
 
 [*]
@@ -26,4 +30,4 @@ trim_trailing_whitespace = false
 
 # Denotes whether file should end with a newline
 # Possible values - true, false
-insert_final_newline = true 
+insert_final_newline = true
